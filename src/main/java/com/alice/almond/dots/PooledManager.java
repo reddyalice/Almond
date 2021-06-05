@@ -1,5 +1,6 @@
 package com.alice.almond.dots;
 
+import com.alice.almond.Scene;
 import com.alice.almond.utils.collections.Pool;
 
 public class PooledManager extends EntityManager {
@@ -7,13 +8,13 @@ public class PooledManager extends EntityManager {
     private EntityPool entityPool;
 	private ComponentPools componentPools;
 
-    public PooledManager () {
-		this(10, 100, 10, 100);
+    public PooledManager (Scene scene) {
+		this(scene, 10, 100, 10, 100);
 	}
 
 
-	public PooledManager (int entityPoolInitialSize, int entityPoolMaxSize, int componentPoolInitialSize, int componentPoolMaxSize) {
-		super();
+	public PooledManager (Scene scene, int entityPoolInitialSize, int entityPoolMaxSize, int componentPoolInitialSize, int componentPoolMaxSize) {
+		super(scene);
 
 		entityPool = new EntityPool(entityPoolInitialSize, entityPoolMaxSize);
 		componentPools = new ComponentPools(componentPoolInitialSize, componentPoolMaxSize);

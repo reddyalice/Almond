@@ -24,7 +24,7 @@ public class Event<T>{
 			consumers.remove(name);
 	}
 	
-	public void Dispose() {
+	public void Clear() {
 		consumers.clear();
 	}
 }

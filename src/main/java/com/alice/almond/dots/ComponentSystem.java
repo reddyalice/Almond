@@ -1,9 +1,11 @@
 package com.alice.almond.dots;
 
-public abstract class ComponentSystem {
+import com.alice.almond.utils.Event;
+
+public class ComponentSystem {
     public int priority;
     public boolean multiThreaded;
-    private boolean processing;
+    public boolean processing;
 	private EntityManager manager;
 
     public ComponentSystem () {
@@ -20,38 +22,23 @@ public abstract class ComponentSystem {
         this.multiThreaded = multiThreaded;
 	}
 
-    public void addedToManager (EntityManager manager) {
-	}
-	
-	public void removedFromManager (EntityManager manager) {
-	}
-
-	
-	public void update (float deltaTime) {
-    }
-
-    public boolean checkProcessing () {
-		return processing;
-	}
-
-	
-	public void setProcessing (boolean processing) {
-		this.processing = processing;
-	}
+	public final Event<EntityManager> addedToManager = new Event<EntityManager>();
+	public final Event<EntityManager> removedFromManager = new Event<EntityManager>();
+	public final Event<Float> update = new Event<Float>();
 	
 
 	public EntityManager getManager () {
 		return manager;
 	}
 	
-	public final void addedToManagerInternal(EntityManager manager) {
+	final void addedToManagerInternal(EntityManager manager) {
 		this.manager = manager;
-		addedToManager(manager);
+		addedToManager.Broadcast(manager);
 	}
 	
-	public final void removedFromManagerInternal(EntityManager manager) {
+	final void removedFromManagerInternal(EntityManager manager) {
 		this.manager = null;
-		removedFromManager(manager);
+		removedFromManager.Broadcast(manager);
 	}
 
 }
