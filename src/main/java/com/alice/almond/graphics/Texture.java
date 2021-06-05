@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 
 public final class Texture implements Serializable {
 
-    public transient int id;
+    public transient int id = 0;
     public final int width, height;
     public final int[] pixels;
 

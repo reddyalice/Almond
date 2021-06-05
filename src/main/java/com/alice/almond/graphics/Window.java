@@ -3,6 +3,7 @@ package com.alice.almond.graphics;
 import com.alice.almond.utils.Event;
 
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL;
 
 public class Window {
 
@@ -18,6 +19,9 @@ public class Window {
         this.height = height;
         this.title = title;
         this.camera = camera;
+        preUpdate.Add("pull", x -> GLFW.glfwPollEvents());
+        GLFW.glfwMakeContextCurrent(windowId);
+        GL.createCapabilities();
     }
 
     public Event<Float> preUpdate = new Event<Float>();

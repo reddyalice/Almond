@@ -53,6 +53,10 @@ public class Scene {
         return windows.get(key);
     }
 
+    public HashMap<String, Window> getWindows(){
+        return windows;
+    }
+
 
 
 }
