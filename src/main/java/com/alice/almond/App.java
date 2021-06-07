@@ -38,11 +38,10 @@ public class App
 			System.exit(1);
         }
        
-        PerspectiveCamera cam = new PerspectiveCamera(67, 640, 480);
+        OrthographicCamera cam = new OrthographicCamera( 640, 480);
         Scene scene = new Scene();
         Window w = scene.createWindow(cam, "title", 640, 480, false);
-        cam.window = w;
-        
+   
         
         Model3D modelData = OBJLoader.loadOBJ("res/models/cactus.obj");
         
@@ -58,23 +57,25 @@ public class App
        
         
 
-        Window w2 = scene.createWindow(cam, "title1", 640, 480, true);
-        Window w3 = scene.createWindow(cam, "title12", 640, 480, false);
+       // Window w2 = scene.createWindow(cam, "title1", 640, 480, true);
+       // Window w3 = scene.createWindow(cam, "title12", 640, 480, false);
         Entity en = scene.createEntity();
         MaterialComponent comp = scene.createComponent(MaterialComponent.class);
         comp.texture = new Texture("res/textures/cactus.png");
         comp.model = VAO.loadToVAO(modelData);
         comp.texture.GenTexture();
         comp.material = new Basic3DMaterial();
-        en.rotation.rotateZ(90f);
+      
         en.add(comp);
-        en.position.set(0, 0, -1);
+        en.position.set(0,0,-1);
+        en.scale.set(1, 1, 1);
+       
         scene.init.Broadcast(1f/60f);
 
         scene.addSystem(new RenderingSystem());
         while(scene.getWindows().size > 0){
 
-          
+            cam.update();
             scene.update.Broadcast(1f/60f);
             GLFW.glfwPollEvents();
 

@@ -20,9 +20,11 @@ public class MathUtils {
 		return value + 1;
 	}
 
-	public static Matrix4f CreateTransformationMatrix(Vector3f translation, Quaternionf rotation, Vector3f scale){
+	public static Matrix4f CreateTransformationMatrix(Vector3f translation, Vector3f rotation, Vector3f scale){
 		Matrix4f matrix = new Matrix4f();
-		matrix.identity().translate(translation).rotate(rotation).scale(scale.x, scale.y, scale.z);
+		matrix.identity().translate(translation).rotateX((float)Math.toRadians(rotation.x)).
+		rotateY((float)Math.toRadians(rotation.y)).
+		rotateZ((float)Math.toRadians(rotation.z)).scale(scale.x, scale.y, scale.z);
 		return matrix;
 	}
 

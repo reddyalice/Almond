@@ -16,8 +16,8 @@ public class Entity {
 	public final Signal<Entity> componentRemoved;
 
 	public final Vector3f position = new Vector3f();
-    public final Quaternionf rotation = new Quaternionf();
-    public final Vector3f scale = new Vector3f(100,100,100);
+    public final Vector3f rotation = new Vector3f();
+    public final Vector3f scale = new Vector3f(1,1,1);
 
 	public boolean scheduledForRemoval;
 	public boolean removing;

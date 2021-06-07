@@ -1,6 +1,7 @@
 package com.alice.almond.systems;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.alice.almond.components.MaterialComponent;
 import com.alice.almond.dots.ComponentSystem;
@@ -34,7 +35,7 @@ public class RenderingSystem extends ComponentSystem {
     public final Event<Float> postRender = new Event<Float>();
 
 
-    private final Dictionary<Shader, Dictionary<VAO, Dictionary<Material, Dictionary<Texture, ArrayList<Entity>>>>> renderies = new Dictionary<Shader, Dictionary<VAO, Dictionary<Material, Dictionary<Texture, ArrayList<Entity>>>>>();
+    private final HashMap<Shader, HashMap<VAO, HashMap<Material, HashMap<Texture, ArrayList<Entity>>>>> renderies = new HashMap<Shader, HashMap<VAO, HashMap<Material, HashMap<Texture, ArrayList<Entity>>>>>();
 
     public RenderingSystem(){
         
@@ -53,11 +54,11 @@ public class RenderingSystem extends ComponentSystem {
                 VAO vao = mc.model;
                 Texture texture = mc.texture;
 
-                Dictionary<VAO, Dictionary<Material, Dictionary<Texture, ArrayList<Entity>>>> batch0 = renderies.get(shader);
+                HashMap<VAO, HashMap<Material, HashMap<Texture, ArrayList<Entity>>>> batch0 = renderies.get(shader);
                 if(batch0 != null){
-                    Dictionary<Material, Dictionary<Texture, ArrayList<Entity>>> batch1 = batch0.get(vao);
+                    HashMap<Material, HashMap<Texture, ArrayList<Entity>>> batch1 = batch0.get(vao);
                     if(batch1 != null){
-                        Dictionary<Texture, ArrayList<Entity>> batch2 = batch1.get(material);
+                        HashMap<Texture, ArrayList<Entity>> batch2 = batch1.get(material);
                         if(batch2 != null){
                             ArrayList<Entity> batch3 = batch2.get(texture);
                             if(batch3 != null){
@@ -75,7 +76,7 @@ public class RenderingSystem extends ComponentSystem {
                                 renderies.put(shader, batch0);
                             }
                         }else{
-                            batch2 = new Dictionary<Texture, ArrayList<Entity>>();
+                            batch2 = new HashMap<Texture, ArrayList<Entity>>();
                             ArrayList<Entity> batch3 = new ArrayList<Entity>();
                             batch3.add(en);
                             batch2.put(texture, batch3);
@@ -84,8 +85,8 @@ public class RenderingSystem extends ComponentSystem {
                             renderies.put(shader, batch0);
                         }
                     }else{
-                        batch1 = new Dictionary<Material, Dictionary<Texture, ArrayList<Entity>>>();
-                        Dictionary<Texture, ArrayList<Entity>> batch2 = new Dictionary<Texture, ArrayList<Entity>>();
+                        batch1 = new HashMap<Material, HashMap<Texture, ArrayList<Entity>>>();
+                        HashMap<Texture, ArrayList<Entity>> batch2 = new HashMap<Texture, ArrayList<Entity>>();
                         ArrayList<Entity> batch3 = new ArrayList<Entity>();
                         batch3.add(en);
                         batch2.put(texture, batch3);
@@ -94,9 +95,9 @@ public class RenderingSystem extends ComponentSystem {
                         renderies.put(shader, batch0);
                     }
                 }else{
-                    batch0 = new Dictionary<VAO, Dictionary<Material, Dictionary<Texture, ArrayList<Entity>>>>();
-                    Dictionary<Material, Dictionary<Texture, ArrayList<Entity>>> batch1 = new Dictionary<Material, Dictionary<Texture, ArrayList<Entity>>>();
-                    Dictionary<Texture, ArrayList<Entity>> batch2 = new Dictionary<Texture, ArrayList<Entity>>();
+                    batch0 = new HashMap<VAO, HashMap<Material, HashMap<Texture, ArrayList<Entity>>>>();
+                    HashMap<Material, HashMap<Texture, ArrayList<Entity>>> batch1 = new HashMap<Material, HashMap<Texture, ArrayList<Entity>>>();
+                    HashMap<Texture, ArrayList<Entity>> batch2 = new HashMap<Texture, ArrayList<Entity>>();
                     ArrayList<Entity> batch3 = new ArrayList<Entity>();
                     batch3.add(en);
                     batch2.put(texture, batch3);
@@ -128,21 +129,20 @@ public class RenderingSystem extends ComponentSystem {
                 //GL11.glEnable(GL11.GL_DEPTH_TEST);
 		        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		        GL11.glClearColor(0, 0, 0, 0);
-                for(Shader shader : renderies.keys()){
+                for(Shader shader : renderies.keySet()){
 
                     shader.Start();
 
-                    for(VAO vao : renderies.get(shader).keys()){
+                    for(VAO vao : renderies.get(shader).keySet()){
 
                         GL30.glBindVertexArray(vao.id);
                         GL20.glEnableVertexAttribArray(0);
                         GL20.glEnableVertexAttribArray(1);
                         GL20.glEnableVertexAttribArray(2);
                         
-                        for(Material material : renderies.get(shader).get(vao).keys()){
+                        for(Material material : renderies.get(shader).get(vao).keySet()){
                             material.LoadCamera(window.camera);
-                           
-                            for(Texture texture : renderies.get(shader).get(vao).get(material).keys()){
+                            for(Texture texture : renderies.get(shader).get(vao).get(material).keySet()){
                                 GL11.glEnable(GL11.GL_TEXTURE_2D);
                                
                                 
