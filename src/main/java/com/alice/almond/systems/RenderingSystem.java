@@ -5,20 +5,22 @@ import java.util.ArrayList;
 import com.alice.almond.components.MaterialComponent;
 import com.alice.almond.dots.ComponentSystem;
 import com.alice.almond.dots.Entity;
-import com.alice.almond.dots.EntityManager;
 import com.alice.almond.graphics.Material;
 import com.alice.almond.graphics.Shader;
 import com.alice.almond.graphics.Texture;
 import com.alice.almond.graphics.VAO;
 import com.alice.almond.graphics.Window;
+import com.alice.almond.management.EntityManager;
 import com.alice.almond.dots.ComponentFamily;
 import com.alice.almond.utils.Event;
 import com.alice.almond.utils.collections.Dictionary;
 import com.alice.almond.utils.collections.ImmutableArray;
 
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32C;
 
@@ -40,7 +42,10 @@ public class RenderingSystem extends ComponentSystem {
             renderies.clear();
             this.manager = x;
             this.entities = x.getEntitiesFor(ComponentFamily.all(MaterialComponent.class).get());
+        });
 
+
+        preRender.Add("sort", x -> {
             for(Entity en : entities){
                 MaterialComponent mc = en.getComponent(MaterialComponent.class);
                 Shader shader = mc.material.shader;
@@ -117,13 +122,12 @@ public class RenderingSystem extends ComponentSystem {
 
         render.Add("standardRender", x -> {
 
-            for(String windowKey : manager.scene.getWindows().keySet()){
-                Window window = manager.scene.getWindow(windowKey);
+            for(Window window : manager.scene.getWindows()){
                 GLFW.glfwMakeContextCurrent(window.windowId);
                 window.preRender.Broadcast(x);
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
+                //GL11.glEnable(GL11.GL_DEPTH_TEST);
 		        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		        GL11.glClearColor(1, 1, 1, 1);
+		        GL11.glClearColor(0, 0, 0, 0);
                 for(Shader shader : renderies.keys()){
 
                     shader.Start();
@@ -131,38 +135,35 @@ public class RenderingSystem extends ComponentSystem {
                     for(VAO vao : renderies.get(shader).keys()){
 
                         GL30.glBindVertexArray(vao.id);
-		                GL32C.glEnableVertexAttribArray(0);
-		                GL32C.glEnableVertexAttribArray(1);
-		                GL32C.glEnableVertexAttribArray(2);
-
+                        GL20.glEnableVertexAttribArray(0);
+                        GL20.glEnableVertexAttribArray(1);
+                        GL20.glEnableVertexAttribArray(2);
+                        
                         for(Material material : renderies.get(shader).get(vao).keys()){
                             material.LoadCamera(window.camera);
                            
                             for(Texture texture : renderies.get(shader).get(vao).get(material).keys()){
-
                                 GL11.glEnable(GL11.GL_TEXTURE_2D);
-                                GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.id);
+                               
+                                
+                                GL20.glActiveTexture(GL13.GL_TEXTURE0);
+		                        texture.Bind();
 
                                 for(Entity en : renderies.get(shader).get(vao).get(material).get(texture)){
                                     material.LoadEntity(en);
                                     GL11.glDrawElements(GL11.GL_TRIANGLES, vao.vertexCount, GL11.GL_UNSIGNED_INT, 0);
 
-
-
-
-
-
+                                    
                                 }
-
+                               
                                 GL11.glDisable(GL11.GL_TEXTURE_2D);
                             }
                         }
 
-                        GL32C.glDisableVertexAttribArray(2);
-		                GL32C.glDisableVertexAttribArray(1);
-		                GL32C.glDisableVertexAttribArray(0);
-		                GL30.glBindVertexArray(0);
+                        GL20.glDisableVertexAttribArray(2);
+                        GL20.glDisableVertexAttribArray(1);
+                        GL20.glDisableVertexAttribArray(0);
+                        GL30.glBindVertexArray(0);
 
 
                     }

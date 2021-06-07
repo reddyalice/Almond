@@ -1,6 +1,8 @@
-package com.alice.almond.dots;
+package com.alice.almond.management;
 
-import com.alice.almond.Scene;
+import com.alice.almond.dots.Component;
+import com.alice.almond.dots.ComponentPools;
+import com.alice.almond.dots.Entity;
 import com.alice.almond.utils.collections.Pool;
 
 public class PooledManager extends EntityManager {

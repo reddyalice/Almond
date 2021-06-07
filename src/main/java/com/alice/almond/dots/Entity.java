@@ -1,5 +1,6 @@
 package com.alice.almond.dots;
 
+import com.alice.almond.management.ComponentOperationHandler;
 import com.alice.almond.utils.Signal;
 import com.alice.almond.utils.collections.Array;
 import com.alice.almond.utils.collections.Bag;
@@ -16,7 +17,7 @@ public class Entity {
 
 	public final Vector3f position = new Vector3f();
     public final Quaternionf rotation = new Quaternionf();
-    public final Vector3f scale = new Vector3f(1,1,1);
+    public final Vector3f scale = new Vector3f(100,100,100);
 
 	public boolean scheduledForRemoval;
 	public boolean removing;

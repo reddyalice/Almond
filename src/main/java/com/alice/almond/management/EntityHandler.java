@@ -1,5 +1,7 @@
-package com.alice.almond.dots;
+package com.alice.almond.management;
 
+import com.alice.almond.dots.Entity;
+import com.alice.almond.dots.EntityListener;
 import com.alice.almond.utils.collections.Array;
 import com.alice.almond.utils.collections.DSet;
 import com.alice.almond.utils.collections.ImmutableArray;

@@ -1,9 +1,13 @@
-package com.alice.almond.dots;
+package com.alice.almond.management;
 
 import com.alice.almond.App;
-import com.alice.almond.Scene;
-import com.alice.almond.dots.ComponentOperationHandler.BooleanInformer;
-import com.alice.almond.dots.SystemHandler.SystemListener;
+import com.alice.almond.dots.Component;
+import com.alice.almond.dots.ComponentFamily;
+import com.alice.almond.dots.ComponentSystem;
+import com.alice.almond.dots.Entity;
+import com.alice.almond.dots.EntityListener;
+import com.alice.almond.management.ComponentOperationHandler.BooleanInformer;
+import com.alice.almond.management.SystemHandler.SystemListener;
 import com.alice.almond.utils.Event;
 import com.alice.almond.utils.Listener;
 import com.alice.almond.utils.Signal;
@@ -175,7 +179,7 @@ public class EntityManager {
 
 			}
 			singleThreadUpdate.Broadcast(deltaTime);
-			while(!App.EXECUTER.isTerminated())	{}
+			//TODO while(!App.EXECUTER.isShutdown())	{}
 
 
 		

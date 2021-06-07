@@ -1,10 +1,22 @@
 package com.alice.almond;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.alice.almond.components.MaterialComponent;
+import com.alice.almond.dots.Entity;
+import com.alice.almond.graphics.Model2D;
+import com.alice.almond.graphics.Model3D;
 import com.alice.almond.graphics.OrthographicCamera;
+import com.alice.almond.graphics.PerspectiveCamera;
+import com.alice.almond.graphics.Texture;
+import com.alice.almond.graphics.VAO;
 import com.alice.almond.graphics.Window;
+import com.alice.almond.graphics.materials.Basic2DMaterial;
+import com.alice.almond.graphics.materials.Basic3DMaterial;
+import com.alice.almond.management.OBJLoader;
+import com.alice.almond.management.Scene;
 import com.alice.almond.systems.RenderingSystem;
 
 import org.lwjgl.glfw.GLFW;
@@ -17,7 +29,7 @@ public class App
     private static final int CORES = Runtime.getRuntime().availableProcessors();
     public static final ExecutorService EXECUTER = Executors.newFixedThreadPool(CORES);
 
-    public static void main( String[] args )
+    public static void main( String[] args ) throws IOException
     {
         GLFWErrorCallback.createPrint(System.err).set();
 		boolean isInitialized  = GLFW.glfwInit();
@@ -25,22 +37,52 @@ public class App
 			System.err.println("Failed To initialized!");
 			System.exit(1);
         }
-
        
+        PerspectiveCamera cam = new PerspectiveCamera(67, 640, 480);
         Scene scene = new Scene();
+        Window w = scene.createWindow(cam, "title", 640, 480, false);
+        cam.window = w;
+        
+        
+        Model3D modelData = OBJLoader.loadOBJ("res/models/cactus.obj");
+        
+
+
+        
+        //comp.model = VAO.loadToVAO(modelData);
+        
+        //comp.texture.GenTexture();
+        //comp.material = new BasicMaterial();
+        
+      
+       
+        
+
+        Window w2 = scene.createWindow(cam, "title1", 640, 480, true);
+        Window w3 = scene.createWindow(cam, "title12", 640, 480, false);
+        Entity en = scene.createEntity();
+        MaterialComponent comp = scene.createComponent(MaterialComponent.class);
+        comp.texture = new Texture("res/textures/cactus.png");
+        comp.model = VAO.loadToVAO(modelData);
+        comp.texture.GenTexture();
+        comp.material = new Basic3DMaterial();
+        en.rotation.rotateZ(90f);
+        en.add(comp);
+        en.position.set(0, 0, -1);
+        scene.init.Broadcast(1f/60f);
+
         scene.addSystem(new RenderingSystem());
-        Window w = scene.createWindow("test", new OrthographicCamera(640, 480), "title", 640, 480, false);
+        while(scene.getWindows().size > 0){
 
-        while(!GLFW.glfwWindowShouldClose(w.windowId)){
-
-            w.preUpdate.Broadcast(1f/60f);
+          
             scene.update.Broadcast(1f/60f);
+            GLFW.glfwPollEvents();
 
 
         }
 
         
-
+        GLFW.glfwTerminate();
 
 
     }

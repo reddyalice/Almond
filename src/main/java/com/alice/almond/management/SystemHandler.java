@@ -1,7 +1,8 @@
-package com.alice.almond.dots;
+package com.alice.almond.management;
 
 import java.util.Comparator;
 
+import com.alice.almond.dots.ComponentSystem;
 import com.alice.almond.utils.collections.Array;
 import com.alice.almond.utils.collections.Dictionary;
 import com.alice.almond.utils.collections.ImmutableArray;

@@ -1,5 +1,6 @@
 package com.alice.almond.dots;
 
+import com.alice.almond.management.EntityManager;
 import com.alice.almond.utils.Event;
 
 public class ComponentSystem {
@@ -31,12 +32,12 @@ public class ComponentSystem {
 		return manager;
 	}
 	
-	final void addedToManagerInternal(EntityManager manager) {
+	public final void addedToManagerInternal(EntityManager manager) {
 		this.manager = manager;
 		addedToManager.Broadcast(manager);
 	}
 	
-	final void removedFromManagerInternal(EntityManager manager) {
+	public final void removedFromManagerInternal(EntityManager manager) {
 		this.manager = null;
 		removedFromManager.Broadcast(manager);
 	}

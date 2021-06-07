@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 
+import com.alice.almond.utils.collections.Array;
+
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -26,18 +28,21 @@ public abstract class Shader{
     private final FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
     public Shader(String shaderOrShaderFilePath, boolean isShader){
-        String[] lines = null;
+        Array<String> lines = new Array<String>();
         ShaderType type = ShaderType.NONE;
         if(isShader){
-            lines = shaderOrShaderFilePath.split("\n");
+            lines.addAll(shaderOrShaderFilePath.split("\n"));
         }
         else{
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(shaderOrShaderFilePath));
-                lines = new String[(int)reader.lines().count()];
-                int i = 0;
-                while((lines[i] = reader.readLine()) != null)
-                    i++;
+               
+                String line;
+                while((line = reader.readLine()) != null){
+                    lines.add(line);
+                }
+               
+                
                 
                 reader.close();
             } catch (FileNotFoundException e) {
@@ -53,15 +58,15 @@ public abstract class Shader{
             }
         }
 
-        for(int i = 0; i < lines.length; i++){
-            if(lines[i].contains("#shader")){
-                if(lines[i].contains("vertex")){
+        for(int i = 0; i < lines.size; i++){
+            if(lines.get(i).contains("#shader")){
+                if(lines.get(i).contains("vertex")){
                     type = ShaderType.VERTEX;
                     sources.put(GL32C.GL_VERTEX_SHADER, new String());
-                }else if(lines[i].contains("fragment")){
+                }else if(lines.get(i).contains("fragment")){
                     type = ShaderType.FRAGMENT;
                     sources.put(GL32C.GL_FRAGMENT_SHADER, new String());
-                }else if(lines[i].contains("geometry")){
+                }else if(lines.get(i).contains("geometry")){
                     type = ShaderType.GEOMETRY;
                     sources.put(GL32C.GL_GEOMETRY_SHADER, new String());
                 }
@@ -73,20 +78,20 @@ public abstract class Shader{
                     case VERTEX:
                         sb = "";
                         sb += sources.get(GL32C.GL_VERTEX_SHADER);
-                        sb += lines[i] + "\n";
+                        sb += lines.get(i) + "\n";
                         sources.replace(GL32C.GL_VERTEX_SHADER, sb + "");
                         break;
                     case FRAGMENT:
                         sb = "";
                         sb += sources.get(GL32C.GL_FRAGMENT_SHADER);
-                        sb += lines[i] + "\n";
+                        sb += lines.get(i) + "\n";
                         sources.replace(GL32C.GL_FRAGMENT_SHADER, sb + "");
                         break;
                     case GEOMETRY:
 
                         sb = "";
                         sb += sources.get(GL32C.GL_GEOMETRY_SHADER);
-                        sb += lines[i] + "\n";
+                        sb += lines.get(i) + "\n";
                         sources.replace(GL32C.GL_GEOMETRY_SHADER, sb + "");
                         break;
                         

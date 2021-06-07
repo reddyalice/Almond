@@ -1,11 +1,10 @@
 package com.alice.almond.graphics.shaders;
 
-import com.alice.almond.graphics.Camera;
 import com.alice.almond.graphics.Shader;
 
 import org.joml.Matrix4f;
 
-public class BasicShader extends Shader {
+public class Basic2DShader extends Shader {
 
 
     private int location_transformationMatrix;
@@ -13,15 +12,14 @@ public class BasicShader extends Shader {
 
 
 
-    public BasicShader() {
-        super("src/main/java/com/alice/almond/graphics/shaders/BasicShader.glsl", false);
+    public Basic2DShader() {
+        super("res/shaders/Basic2DShader.glsl", false);
     }
 
     @Override
     protected void BindAttributes() {
         BindAttribute(0, "position");
 		BindAttribute(1, "texCoords");
-		BindAttribute(2, "normal");
     }
 
     @Override

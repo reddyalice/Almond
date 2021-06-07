@@ -6,7 +6,7 @@ public abstract class Pool<T> {
     public final int max;
     public int peak;
     
-    private final Array<T> freeObjects;
+    protected final Array<T> freeObjects;
 
     public Pool () {
 		this(16, Integer.MAX_VALUE);
